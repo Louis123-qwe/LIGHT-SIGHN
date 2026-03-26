@@ -37,14 +37,29 @@ button { cursor: pointer; font-family: var(--font); }
 /* ── Container ────────────────────────────────────────────────── */
 .container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
 
-/* ── Navbar ───────────────────────────────────────────────────── */
+
+/* ── Navbar Fix ───────────────────────────────────────────────────── */
 .navbar {
-  position: sticky; top: 0; z-index: 900;
+  position: fixed; /* Changed from relative */
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
   background: rgba(255,255,255,.92);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--blue-border);
   transition: box-shadow var(--transition);
+  
+  /* Critical: keeps padding from pushing the nav off-screen */
+  box-sizing: border-box; 
 }
+
+/* Add this to prevent the Hero section from hiding under the fixed nav */
+body {
+  padding-top: 68px; 
+}
+
 .navbar.scrolled { box-shadow: 0 2px 20px rgba(0,87,217,.12); }
 .nav-inner {
   max-width: 1240px; margin: 0 auto; padding: 0 20px;
@@ -427,17 +442,24 @@ button { cursor: pointer; font-family: var(--font); }
   .footer-brand { grid-column: 1/-1; }
 }
 @media (max-width: 600px) {
-  .search-wrap { max-width: none; }
-  .hero { padding: 80px 20px 100px; }
-  .hero-badges { gap: 12px; }
-  .product-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .card-body { padding: 12px 12px 10px; }
-  .card-price { font-size: 1.1rem; }
-  .card-footer { padding: 0 12px 12px; }
-  .footer-inner { grid-template-columns: 1fr; }
-  .modal-body { padding: 0 18px 18px; }
-  .modal-name { font-size: 1.3rem; }
+  /* Ensure the nav-inner doesn't overflow */
+  .nav-inner {
+    padding: 0 12px;
+    gap: 8px;
+  }
+  
+  /* Shrink brand text slightly on very small screens */
+  .brand-text {
+    font-size: 1rem;
+  }
+
+  /* Make sure the search wrap doesn't force a horizontal scroll */
+  .search-wrap {
+    flex: 1;
+    min-width: 0; /* Allows the flex item to shrink below content size */
+  }
 }
+
 @media (max-width: 400px) {
   .product-grid { grid-template-columns: 1fr; }
 }
